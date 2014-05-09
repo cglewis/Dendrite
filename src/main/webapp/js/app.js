@@ -155,6 +155,9 @@ angular.module('dendrite', [
         Snap: {
           algorithm: 'centrality'
         },
+        SnapCommunity: {
+          algorithm: 'bigclam'
+        },
         EdgeDegrees: {
           analyticEngine: 'titan'
         }

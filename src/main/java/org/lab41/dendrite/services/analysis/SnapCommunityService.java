@@ -54,9 +54,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SnapCommunity extends AnalysisService {
+public class SnapCommunityService extends AnalysisService {
 
-    Logger logger = LoggerFactory.getLogger(SnapCommunity.class);
+    Logger logger = LoggerFactory.getLogger(SnapCommunityService.class);
     private org.apache.commons.configuration.Configuration config;
 
     private static List<String> algorithms = Arrays.asList(
@@ -119,13 +119,17 @@ public class SnapCommunity extends AnalysisService {
                 new Path(new Path(fs.getHomeDirectory(), "dendrite"), "tmp"),
                 UUID.randomUUID().toString());
 
-        Path shellPath = new Path("args[0]");
+        Path shellPath = new Path("/tmp/dendrite/create_graph.sh");
         shellPath = FileSystem.get(conf).makeQualified(shellPath);
-        Path snapPath = new Path("args[1]");
+        Path snapPath = new Path("/tmp/dendrite/graphgen");
         snapPath = FileSystem.get(conf).makeQualified(snapPath);
-        final int n = Integer.valueOf("args[2]");
-        Path jarPath = new Path("args[3]");
-        jarPath = FileSystem.get(conf).makeQualified(jarPath);
+
+        final String shellName = "snap.sh";
+        final String snapName = "snapfunc";
+
+        //final int n = Integer.valueOf("args[2]");
+        //Path jarPath = new Path("args[3]");
+        //jarPath = FileSystem.get(conf).makeQualified(jarPath);
 
         // Create yarnClient
         YarnConfiguration conf = new YarnConfiguration();
@@ -143,6 +147,7 @@ public class SnapCommunity extends AnalysisService {
 
         amContainer.setCommands(
             Collections.singletonList(
+                /*
                 "$JAVA_HOME/bin/java" +
                 " -Xmx256M" +
                 " org.lab41.yarnsnap.ApplicationMaster" +
@@ -150,6 +155,8 @@ public class SnapCommunity extends AnalysisService {
                 " " + cmd +
                 " snap.sh " + shellPath +
                 " snapfunc " + snapPath +
+                */
+                cmd +
                 " 1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stdout" + 
                 " 2>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stderr" 
                 )
@@ -159,20 +166,32 @@ public class SnapCommunity extends AnalysisService {
         Map<String, LocalResource> localResources =
             new HashMap<String, LocalResource>();
     
+        /*
         LocalResource appMasterJar = Records.newRecord(LocalResource.class);
         setupAppMasterJar(jarPath, appMasterJar);
         localResources.put("yarnsnap.jar", appMasterJar);
+        */
+
+        LocalResource shellScript = Records.newRecord(LocalResource.class);
+        setupShellScript(shellPath, shellScript);
+        localResources.put(shellName, shellScript);
+
+        LocalResource snapCommand = Records.newRecord(LocalResource.class);
+        setupSnapCommand(snapPath, snapCommand);
+        localResources.put(snapName, snapCommand);
 
         amContainer.setLocalResources(localResources);
 
+        /*
         // Setup CLASSPATH for ApplicationMaster
         Map<String, String> appMasterEnv = new HashMap<String, String>();
         setupAppMasterEnv(appMasterEnv);
         amContainer.setEnvironment(appMasterEnv);
-    
+        */
+        
         // Set up resource type requirements for ApplicationMaster
         Resource capability = Records.newRecord(Resource.class);
-        capability.setMemory(256);
+        capability.setMemory(128);
         capability.setVirtualCores(1);
 
         // Finally, set-up ApplicationSubmissionContext for the application
@@ -205,6 +224,25 @@ public class SnapCommunity extends AnalysisService {
 
     }
   
+    private void setupSnapCommand(Path snapPath, LocalResource snapCommand) throws IOException {
+        FileStatus snapStat = FileSystem.get(conf).getFileStatus(snapPath);
+        snapCommand.setResource(ConverterUtils.getYarnUrlFromPath(snapPath));
+        snapCommand.setSize(snapStat.getLen());
+        snapCommand.setTimestamp(snapStat.getModificationTime());
+        snapCommand.setType(LocalResourceType.FILE);
+        snapCommand.setVisibility(LocalResourceVisibility.PUBLIC);
+    }
+
+    private void setupShellScript(Path shellPath, LocalResource shellScript) throws IOException {
+        FileStatus shellStat = FileSystem.get(conf).getFileStatus(shellPath);
+        shellScript.setResource(ConverterUtils.getYarnUrlFromPath(shellPath));
+        shellScript.setSize(shellStat.getLen());
+        shellScript.setTimestamp(shellStat.getModificationTime());
+        shellScript.setType(LocalResourceType.FILE);
+        shellScript.setVisibility(LocalResourceVisibility.PUBLIC);
+    }
+
+    /*
     private void setupAppMasterJar(Path jarPath, LocalResource appMasterJar) throws IOException {
         FileStatus jarStat = FileSystem.get(conf).getFileStatus(jarPath);
         appMasterJar.setResource(ConverterUtils.getYarnUrlFromPath(jarPath));
@@ -225,4 +263,5 @@ public class SnapCommunity extends AnalysisService {
             Environment.CLASSPATH.name(),
             Environment.PWD.$() + File.separator + "*");
     }
+    */
 }

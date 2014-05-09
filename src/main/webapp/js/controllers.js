@@ -366,6 +366,10 @@ angular.module('dendrite.controllers', []).
           else if ($scope.analyticType === "Snap") {
             Analytics.createSnap({graphId: $routeParams.graphId, algorithm: $scope.attr.algorithm}, undefined);
           }
+          // Snap Community 
+          else if ($scope.analyticType === "SnapCommunity") {
+            Analytics.createSnapCommunity({graphId: $routeParams.graphId, algorithm: $scope.attr.algorithm}, undefined);
+          }
           // Edge Degrees
           else if ($scope.analyticType === "EdgeDegrees") {
             if ($scope.attr.analyticEngine === "faunus") {

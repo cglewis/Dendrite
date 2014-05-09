@@ -1,0 +1,25 @@
+<!-- Modal (external ./partials/modal.html or inline ng-template) -->
+<div ng-controller="AnalyticsFormCtrl" ng-init="analyticType = 'SnapCommunity'">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Analytics: Snap Community</h3>
+  </div>
+
+  <div class="modal-body">
+    <div class="well">
+      <p><strong>Definition: </strong>Snap has a wide variety of Graph Analytic Algorithms, below are the choices available for community detection.</p>
+    </div>
+
+    <p>
+      <label>Snap Community Detection Algorithms</label>
+      <form name="algorithmsForm">
+        <input type="radio" ng-model="attr.algorithm" name="algorithms" value="bigclam"> Bigclam<br />
+      </form>
+    </p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="dismiss()">Cancel</button>
+    <button class="btn btn-primary" ng-click="calculate(); dismiss()">Calculate Snap Community Algorithm</button>
+  </div>
+</div>

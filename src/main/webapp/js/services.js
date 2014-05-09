@@ -778,6 +778,12 @@ angular.module('dendrite.services', ['ngResource']).
             isArray: false
           },
 
+          createSnapCommunity: {
+            url: 'api/graphs/:graphId/analysis/snap-community/:algorithm',
+            method: 'POST',
+            isArray: false
+          },
+
           createEdgeDegreesFaunus: {
             url: 'api/graphs/:graphId/analysis/faunus-degrees',
             method: 'POST',

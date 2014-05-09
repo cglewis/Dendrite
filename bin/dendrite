@@ -274,6 +274,12 @@ class Graph(Table):
 
         return Job.get(self.conn, response['jobId'])
 
+    def run_snap_community(self, algorithm):
+        url = '/api/graphs/{}/analysis/snap-community/{}'.format(self.id, algorithm)
+        response = self.conn.post(url).json()
+
+        return Job.get(self.conn, response['jobId'])
+
     def run_jung(self, algorithm, alpha=0.15):
         url = '/api/graphs/{}/analysis/jung-{}'.format(self.id, algorithm)
         response = self.conn.post_json(url).json()
@@ -592,6 +598,14 @@ def run_snap(args):
         job = graph.run_snap(args.algorithm)
         job.wait_until_finished()
 
+def run_snap_community(args):
+    with closing(Connection(args)) as conn:
+        graph = Graph.get(conn, args.id)
+
+        print 'Running Snap Community ' + args.algorithm + ' analysis...'
+        job = graph.run_snap_community(args.algorithm)
+        job.wait_until_finished()
+
 def run_jung(args):
     with closing(Connection(args)) as conn:
         graph = Graph.get(conn, args.id)
@@ -807,6 +821,13 @@ def main():
     parser_run_snap.add_argument('algorithm',
             choices=['centrality'])
     parser_run_snap.set_defaults(func=run_snap)
+
+    parser_run_snap_community = run_subparsers.add_parser('snap-community')
+    parser_run_snap_community.add_argument('id',
+            type=int)
+    parser_run_snap_community.add_argument('algorithm',
+            choices=['bigclam'])
+    parser_run_snap_community.set_defaults(func=run_snap_community)
 
     parser_run_jung = run_subparsers.add_parser('jung')
     parser_run_jung.add_argument('-a', '--alpha',

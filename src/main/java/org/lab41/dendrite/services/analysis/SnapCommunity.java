@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.thinkaurelius.faunus.FaunusGraph;
 import com.thinkaurelius.faunus.FaunusPipeline;
@@ -118,12 +119,12 @@ public class SnapCommunity extends AnalysisService {
                 new Path(new Path(fs.getHomeDirectory(), "dendrite"), "tmp"),
                 UUID.randomUUID().toString());
 
-        Path shellPath = new Path(args[0]);
+        Path shellPath = new Path("args[0]");
         shellPath = FileSystem.get(conf).makeQualified(shellPath);
-        Path snapPath = new Path(args[1]);
+        Path snapPath = new Path("args[1]");
         snapPath = FileSystem.get(conf).makeQualified(snapPath);
-        final int n = Integer.valueOf(args[2]);
-        Path jarPath = new Path(args[3]);
+        final int n = Integer.valueOf("args[2]");
+        Path jarPath = new Path("args[3]");
         jarPath = FileSystem.get(conf).makeQualified(jarPath);
 
         // Create yarnClient

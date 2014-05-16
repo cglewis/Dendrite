@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 In-Q-Tel/Lab41
+ * Copyright 2014 In-Q-Tel/Lab41
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,13 @@ angular.module('dendrite.filters', [])
   .filter('capitalize', function() {
     return function(input, scope) {
         return input.substring(0,1).toUpperCase()+input.substring(1);
+    }
+  })
+  .filter('domainName', function() {
+    return function(input, scope) {
+        var el = document.createElement("a");
+        el.href = input;
+        return el.hostname;
     }
   })
   .filter('truncate', function() {

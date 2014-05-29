@@ -244,7 +244,7 @@ angular.module('dendrite', [
       'snap_big_clam': {
         'category': 'community',
         'description': 'The <a href="http://snap.stanford.edu">Stanford Network Analysis Platform (SNAP)</a> has a wide variety of Graph Analytic Algorithms, including BIGCLAM.  BIGCLAM implements a large scale overlapping community detection method based on Cluster Affiliation Graph Model for Big Networks.',
-        'form': 'partials/analytics/key_players/snap_big_clam/form.html',
+        'form': 'partials/analytics/community/snap_big_clam/form.html',
         'defaults': {},
         'example': {
           'img': 'partials/analytics/key_players/snap_centrality/example/Random-graph-Erdos_generated_netwo.svg',

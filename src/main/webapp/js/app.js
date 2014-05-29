@@ -33,8 +33,8 @@ angular.module('dendrite', [
   config(['$routeProvider', function($routeProvider) {
     var access = routingConfig.accessLevels;
     $routeProvider.
-        when('/home', {templateUrl: 'partials/home.html', controller: 'HomeCtrl', access: access.ROLE_ANON}).
-        when('/login', {templateUrl: 'partials/login.html', controller: 'LoginCtrl', access: access.ROLE_ANON}).
+        when('/home', {templateUrl: 'partials/home.html', controller: 'HomeCtrl', access: access.ROLE_ANON}).
+        when('/login', {templateUrl: 'partials/login.html', controller: 'LoginCtrl', access: access.ROLE_ANON}).
         when('/graphs/:graphId', {templateUrl: 'partials/graph-detail.html', controller: 'GraphDetailCtrl', access: access.ROLE_USER}).
         when('/graphs/:graphId/vertices', {
           templateUrl: 'partials/vertex-list.html',
@@ -241,6 +241,16 @@ angular.module('dendrite', [
           'ref': 'http://upload.wikimedia.org/wikipedia/commons/5/5f/Random-graph-Erdos_generated_network.svg'
         }
       },
+      'snap_big_clam': {
+        'category': 'community',
+        'description': 'The <a href="http://snap.stanford.edu">Stanford Network Analysis Platform (SNAP)</a> has a wide variety of Graph Analytic Algorithms, including BIGCLAM.  BIGCLAM implements a large scale overlapping community detection method based on Cluster Affiliation Graph Model for Big Networks.',
+        'form': 'partials/analytics/key_players/snap_big_clam/form.html',
+        'defaults': {},
+        'example': {
+          'img': 'partials/analytics/key_players/snap_centrality/example/Random-graph-Erdos_generated_netwo.svg',
+          'ref': 'http://upload.wikimedia.org/wikipedia/commons/5/5f/Random-graph-Erdos_generated_netwo.svg'
+        }
+      },
       'connected_component': {
         'category': 'community',
         'description': 'A <a href="http://en.wikipedia.org/wiki/Connected_component_(graph_theory)">connected component</a> is a group of vertices such that there is a path between each vertex in the component and all other vertices in the group. If two vertices are in different connected components there is no path between them.',
@@ -310,7 +320,7 @@ angular.module('dendrite', [
       maxBytesLocal: Math.pow(1024,3)
     }
   }).
-  run(['$rootScope', '$http', '$location', 'User', function(scope, $http, $location, User) {
+  run(['$rootScope', '$http', '$location', 'User', function(scope, $http, $location, User) {
     // store requests which failed due to 401 response.
     scope.requests401 = [];
 
